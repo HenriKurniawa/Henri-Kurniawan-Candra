@@ -1,0 +1,60 @@
+#include <stdio.h>
+
+struct Date {
+    int day;
+    int month;
+    int year;
+};
+
+
+int isLeapYear(int year) {
+    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+        return 1;
+    else
+        return 0; 
+}
+
+
+struct Date predictTomorrow(struct Date today) {
+    struct Date tomorrow;
+
+    
+    tomorrow.day = today.day + 1;
+    tomorrow.month = today.month;
+    tomorrow.year = today.year;
+
+    
+    if (tomorrow.day > 31 && (tomorrow.month == 1 || tomorrow.month == 3 || tomorrow.month == 5 || tomorrow.month == 7 || tomorrow.month == 8 || tomorrow.month == 10 || tomorrow.month == 12) ||
+        (tomorrow.day > 30 && (tomorrow.month == 4 || tomorrow.month == 6 || tomorrow.month == 9 || tomorrow.month == 11)) ||
+        (tomorrow.day > 29 && tomorrow.month == 2 && isLeapYear(tomorrow.year)) ||
+        (tomorrow.day > 28 && tomorrow.month == 2 && !isLeapYear(tomorrow.year))) {
+        
+        tomorrow.day = 1;
+        tomorrow.month++;
+
+        
+        if (tomorrow.month > 12) {
+            
+            tomorrow.month = 1;
+            tomorrow.year++;
+        }
+    }
+
+    return tomorrow;
+}
+
+int main() {
+    
+    struct Date today;
+    printf("Masukkan tanggal hari ini (dd mm yyyy):\n ");
+    scanf("%d %d %d", &today.day, &today.month, &today.year);
+
+    
+    struct Date tomorrow = predictTomorrow(today);
+
+    
+    printf("Ramalan untuk hari esok:\n");
+    printf("Tanggal: %02d/%02d/%04d\n", tomorrow.day, tomorrow.month, tomorrow.year);
+
+    return 0;
+}
